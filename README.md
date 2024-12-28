@@ -89,7 +89,7 @@ You can easily customize the final diagram by editing the `.style` file. Some co
 
 - **Change fonts**:
   
-  ```
+  ```styl
   fontFamily : "serif"
   fontSize   : "36px"
   ```
