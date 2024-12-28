@@ -8,26 +8,29 @@ on:
       - '**.style'
       - '**.substance'
 
+permissions:
+  contents: write
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out
+      - name: 🔍 Checkout Repository
         uses: actions/checkout@v4.1.1
 
-      - name: Install pdfunite (poppler-utils) and rsvg-convert (librsvg2-bin)
+      - name: 🛠️ Install Dependencies (pdfunite & rsvg-convert)
         run: sudo apt-get update && sudo apt-get install -y poppler-utils librsvg2-bin
-    
-      - name: 🌐 Configure Node.js Environment
+
+      - name: ⚙️ Configure Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install roger
+      - name: 📦 Install Roger Tool
         run: npm install -g @penrose/roger@4.0.0-alpha.5
 
-      - name: Compile Penrose diagrams
+      - name: 🖥️ Compile Penrose Diagrams
         run: |
           mkdir -p output
           # For each .substance file, produce a PDF (and possibly SVG/PNG).
@@ -43,19 +46,19 @@ jobs:
             rsvg-convert -f pdf -o "output/$BASENAME.pdf" "output/$BASENAME.svg"
           done
 
-      - name: Merge all PDFs
+      - name: 📄 Merge PDF Files
         run: |
           cd output
           pdfunite *.pdf laundry-signs.pdf
           ls -lh
 
-      - name: Generate release tag
+      - name: 🏷️ Generate Release Tag
         id: tag
         run: |
           DATESTAMP=$(date +"%Y.%m.%d_%H-%M")
           echo "release_tag=Penrose_House_Signs_$DATESTAMP" >> $GITHUB_OUTPUT
 
-      - name: Upload compiled PDF to GitHub Release
+      - name: 🚀 Upload PDF to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: output/laundry-signs.pdf
