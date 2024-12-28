@@ -1,0 +1,51 @@
+name: Compile Example PNG from Cotton
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "substance/cottons.substance"
+
+permissions:
+  contents: write  # needed so the workflow can push changes back to the repo
+
+jobs:
+  compile-example:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔍 Check Out
+        uses: actions/checkout@v4.1.1
+        with:
+          persist-credentials: true  # so we can commit/push changes
+
+      - name: 🛠️ Install Dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y librsvg2-bin
+
+      - name: ⚙️ Configure Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Install Roger
+        run: npm install -g @penrose/roger@4.0.0-alpha.5
+
+      - name: 🎨 Compile to SVG
+        run: |
+          roger trio \
+            substance/cottons.substance \
+            style/laundry-signs.style \
+            domain/laundry-signs.domain \
+            --out example.svg
+
+      - name: 🖼 Convert SVG → PNG
+        run: rsvg-convert -f png -o example.png example.svg
+
+      - name: 📝 Commit & Push Updated PNG
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add example.png
+          git commit -m "chore: update `example.png` from `cottons.substance`"
+          git push

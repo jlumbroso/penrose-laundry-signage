@@ -2,6 +2,27 @@
 
 This repository creates signage diagrams (via [Penrose](https://penrose.cs.cmu.edu/)) for laundry bins.
 
+## Example
+
+The Penrose Substance file for `cottons.substance`:
+
+```penrose
+Category C
+
+HasLabel(C, "COTTONS")
+HasFrequency(C, "washed weekly or upon request")
+
+AcceptedItem(C, "100% cotton; or 1-5% elasthane blends")
+RejectedItem(C, "wool, or any synthetics or special-care items")
+
+AutoLabel All
+```
+
+will generate a sign like this:
+
+![Cottons Sign](example.png)
+
+
 ## Files
 
 - **`domain/laundry-signs.domain`**: The Penrose _Domain_ file declares the `Category` type and our relevant predicates:
