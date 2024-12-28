@@ -1,0 +1,18 @@
+
+# macOS metadata
+.DS_Store
+
+# Node.js modules
+node_modules/
+
+# Logs
+*.log
+
+# Outputs
+output/
+*.pdf
+*.svg
+
+# Temporary files
+*.tmp
+~*
