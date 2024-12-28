@@ -2,7 +2,6 @@ Category C
 
 HasLabel(C, "COTTONS")
 HasFrequency(C, "washed weekly or upon request")
-
 AcceptedItem(C, "100% cotton; or 1-5% elasthane blends")
 RejectedItem(C, "wool, or any synthetics or special-care items")
 
