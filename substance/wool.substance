@@ -1,0 +1,9 @@
+Category W
+
+HasLabel(W, "WOOL")
+HasFrequency(W, "washed every two weeks or upon request")
+
+AcceptedItem(W, "wool sweaters, scarves, etc.")
+RejectedItem(W, "synthetics or cotton items")
+
+AutoLabel All

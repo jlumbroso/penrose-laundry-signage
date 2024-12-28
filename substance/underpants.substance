@@ -1,0 +1,9 @@
+Category U
+
+HasLabel(U, "UNDERPANTS")
+HasFrequency(U, "washed when fills")
+
+AcceptedItem(U, "underwear, socks, bras, briefs")
+RejectedItem(U, "anything else")
+
+AutoLabel All

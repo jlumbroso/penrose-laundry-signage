@@ -1,0 +1,6 @@
+type Category
+
+predicate HasLabel(Category, String)
+predicate HasFrequency(Category, String)
+predicate AcceptedItem(Category, String)
+predicate RejectedItem(Category, String)

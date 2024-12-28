@@ -1,0 +1,9 @@
+Category S
+
+HasLabel(S, "SYNTHETICS")
+HasFrequency(S, "washed monthly")
+
+AcceptedItem(S, "polyester, nylon, spandex, rayon, acrylic")
+RejectedItem(S, "any wool or special-care items")
+
+AutoLabel All

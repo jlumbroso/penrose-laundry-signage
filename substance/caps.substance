@@ -1,0 +1,9 @@
+Category X
+
+HasLabel(X, "CAPS")
+HasFrequency(X, "washed upon request")
+
+AcceptedItem(X, "hats, beanies, caps")
+RejectedItem(X, "none - all hats accepted")
+
+AutoLabel All

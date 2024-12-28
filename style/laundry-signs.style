@@ -1,0 +1,79 @@
+canvas {
+  width = 500
+  height = 200
+}
+
+-- 1) A big green rectangle for each Category
+forall Category c {
+  shape c.sign = Rectangle {
+    center    : (0 * match_id, 0)
+    width     : 500
+    height    : 200
+    fillColor : #90EE90  -- light green
+
+    -- These two lines add rounded corners:
+    cornerRadius : 20  -- corner radius
+  }
+}
+
+-- 2) A large title text at the top
+forall Category c; String lab
+where HasLabel(c, lab) {
+  shape c.labelText = Text {
+    string             : lab
+    fontSize           : "50px"
+    fontWeight         : "bold"
+    textAnchor         : "middle"
+    alignmentBaseline  : "middle"
+    fontFamily         : "sans-serif"
+    center             : c.sign.center + (0, 70)
+    fillColor          : #ffff    -- dark green replaced by white
+  }
+  layer c.labelText above c.sign
+}
+
+-- 3) The wash frequency, italic, below the title
+forall Category c; String freq
+where HasFrequency(c, freq) {
+  shape c.freqText = Text {
+    string             : freq
+    fontSize           : "24px"
+    fontStyle          : "italic"
+    textAnchor         : "middle"
+    alignmentBaseline  : "middle"
+    fontFamily         : "sans-serif"
+    center             : c.sign.center + (0, 15)
+    fillColor          : #006400 -- dark green
+  }
+  layer c.freqText above c.sign
+}
+
+-- 4) ACCEPT lines, near the center
+forall Category c; String item
+where AcceptedItem(c, item) {
+  shape c.acceptText = Text {
+    string             : "ACCEPT: " + item
+    fontSize           : "18px"
+    textAnchor         : "middle"
+    alignmentBaseline  : "middle"
+    fontFamily         : "sans-serif"
+    center             : c.sign.center + (0, -30 * match_id)
+    fillColor          : #006400
+  }
+  layer c.acceptText above c.sign
+}
+
+-- 5) REJECT lines, at the bottom
+forall Category c; String item
+where RejectedItem(c, item) {
+  shape c.rejectText = Text {
+    string             : "REJECT: " + item
+    fontSize           : "18px"
+    textAnchor         : "middle"
+    alignmentBaseline  : "middle"
+    fontFamily         : "sans-serif"
+    center             : c.sign.center + (0, -45 - 20 * match_id)
+    fillColor          : #8B0000  -- dark red
+  }
+  layer c.rejectText above c.sign
+}
