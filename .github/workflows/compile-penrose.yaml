@@ -1,0 +1,64 @@
+name: Compile and Release Penrose Diagrams
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - '**.domain'
+      - '**.style'
+      - '**.substance'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4.1.1
+
+      - name: Install pdfunite (poppler-utils) and rsvg-convert (librsvg2-bin)
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils librsvg2-bin
+    
+      - name: 🌐 Configure Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install roger
+        run: npm install -g @penrose/roger@4.0.0-alpha.5
+
+      - name: Compile Penrose diagrams
+        run: |
+          mkdir -p output
+          # For each .substance file, produce a PDF (and possibly SVG/PNG).
+          # roger can produce PDF via: roger trio ...
+          # We'll do it in a loop for every .substance in substance/.
+          for SUB in substance/*.substance; do
+            BASENAME=$(basename "$SUB" .substance)
+            roger trio \
+              "$SUB" \
+              style/laundry-signs.style \
+              domain/laundry-signs.domain \
+              --out "output/$BASENAME.svg"
+            rsvg-convert -f pdf -o "output/$BASENAME.pdf" "output/$BASENAME.svg"
+          done
+
+      - name: Merge all PDFs
+        run: |
+          cd output
+          pdfunite *.pdf laundry-signs.pdf
+          ls -lh
+
+      - name: Generate release tag
+        id: tag
+        run: |
+          DATESTAMP=$(date +"%Y.%m.%d_%H-%M")
+          echo "release_tag=Penrose_House_Signs_$DATESTAMP" >> $GITHUB_OUTPUT
+
+      - name: Upload compiled PDF to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: output/laundry-signs.pdf
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
